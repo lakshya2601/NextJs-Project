@@ -2,6 +2,8 @@
 import React, { useRef } from "react";
 import { useMotionValueEvent, useScroll } from "framer-motion";
 import { motion } from "framer-motion";
+import Image from "next/image";
+import courseData from "@/data/music_courses.json";
 
 export const StickyScroll = ({
   content,
@@ -33,11 +35,7 @@ export const StickyScroll = ({
     "var(--black)",
     "var(--neutral-900)",
   ];
-  const linearGradients = [
-    "linear-gradient(to bottom right, var(--cyan-500), var(--emerald-500))",
-    "linear-gradient(to bottom right, var(--pink-500), var(--indigo-500))",
-    "linear-gradient(to bottom right, var(--orange-500), var(--yellow-500))",
-  ];
+
   return (
     <motion.div
       animate={{
@@ -77,12 +75,27 @@ export const StickyScroll = ({
           <div className="h-40" />
         </div>
       </div>
-      <motion.div
-        animate={{
-          background: linearGradients[activeCard % linearGradients.length],
-        }}
-        className="hidden lg:block h-60 w-80 rounded-md bg-white sticky top-10 overflow-hidden"
-      ></motion.div>
+      <motion.div className="hidden lg:block h-60 w-80 rounded-md sticky top-10 overflow-hidden shadow-lg shadow-yellow-50">
+        {courseData.courses.map((course, index) => (
+          <motion.div
+            key={course.title}
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: activeCard === index ? 1 : 0,
+              display: activeCard === index ? "block" : "none",
+            }}
+            transition={{ duration: 0.3 }}
+          >
+            <Image
+              src={course.image}
+              height="1000"
+              width="1000"
+              className="h-60 w-full object-cover rounded-md"
+              alt={course.title}
+            />
+          </motion.div>
+        ))}
+      </motion.div>
     </motion.div>
   );
 };
